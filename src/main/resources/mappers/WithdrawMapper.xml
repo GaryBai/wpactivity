@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wayplay.wpactivity.dao.WithdrawDao">
+
+	<select id="getLatestWithdrawList" resultType="java.util.HashMap">
+		(
+			SELECT
+				date_format(w.wd_receivetime, '%Y-%m-%d %H:%i:%s') receivetime,
+				u.ui_username username,
+				co.cp_name "name",
+				co.cp_value "value",
+				co.cp_unit unit
+			FROM
+				tbl_wp_withdraw w,
+				tbl_wp_userinfo u,
+				tbl_wp_coupon co
+			WHERE
+				w.wd_type = 0
+			AND w.wd_cid = co.cp_id
+			AND w.wd_uid = u.ui_uid
+			ORDER BY
+				w.wd_receivetime DESC
+			LIMIT 10
+		)
+		UNION ALL
+			(
+				SELECT
+					date_format(w.wd_receivetime, '%Y-%m-%d %H:%i:%s') receivetime,
+					u.ui_username username,
+					ca.ca_name "name",
+					ca.ca_value "value",
+					ca.ca_unit unit
+				FROM
+					tbl_wp_withdraw w,
+					tbl_wp_userinfo u,
+					tbl_wp_cash ca
+				WHERE
+					w.wd_type = 1
+				AND w.wd_cid = ca.ca_id
+				AND w.wd_uid = u.ui_uid
+				ORDER BY
+					w.wd_receivetime DESC
+				LIMIT 10
+			)
+	</select>
+	
+	<insert id="insertWithdraw" parameterType="com.wayplay.wpactivity.model.Withdraw">
+		INSERT INTO tbl_wp_withdraw (
+			wd_uid,
+			wd_openid,
+			wd_type,
+			wd_cid,
+			wd_receivetime
+		)
+		VALUES
+			(#{uid}, #{openid}, #{type}, #{cid}, now())
+	</insert>
+	
+	<select id="getCouponWithdrawListByOpenid" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT
+			c.cp_id cpid,
+			c.cp_name "name",
+			c.cp_desc "desc",
+			c.cp_period period,
+			c.cp_status "status",
+			date_format(c.cp_createtime, '%Y-%m-%d %H:%i:%s') createtime,
+			date_format(c.cp_issuetime, '%Y-%m-%d %H:%i:%s') issuetime,
+			date_format(c.cp_receivetime, '%Y-%m-%d %H:%i:%s') receivetime,
+			c.cp_value "value",
+			c.cp_unit unit
+		FROM
+			tbl_wp_withdraw w,
+			tbl_wp_coupon c
+		WHERE
+			w.wd_type = 0
+		AND w.wd_cid = c.cp_id
+		AND w.wd_openid = #{openid}
+	</select>
+	
+	<select id="getCashWithdrawListByOpenid" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT
+			c.ca_id caid,
+			c.ca_name "name",
+			c.ca_status "status",
+			c.ca_value "value",
+			c.ca_unit unit,
+			date_format(c.ca_issuetime, '%Y-%m-%d %H:%i:%s') issuetime,
+			date_format(c.ca_receivetime, '%Y-%m-%d %H:%i:%s') receivetime
+		FROM
+			tbl_wp_withdraw w,
+			tbl_wp_cash c
+		WHERE
+			w.wd_type = 1
+		AND w.wd_cid = c.ca_id
+		AND w.wd_openid = #{openid}
+	</select>
+	
+</mapper>

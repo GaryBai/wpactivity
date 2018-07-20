@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wayplay.wpactivity.dao.QRCodeDao">
+
+	<insert id="insertQRCode" parameterType="com.wayplay.wpactivity.model.QRCode"
+		useGeneratedKeys="true" keyProperty="qrid">
+		INSERT INTO tbl_wp_qrcode (
+			qr_createtime,
+			qr_did,
+			qr_status
+		)
+		VALUES
+			(now(), #{did}, 0)
+	</insert>
+	
+	<update id="updateQRCodeUrl" parameterType="java.util.HashMap">
+		UPDATE tbl_wp_qrcode q
+		SET q.qr_url = #{url}
+		WHERE
+			q.qr_id = #{qrid}
+	</update>
+	
+	<update id="updateQRCodeStatus" parameterType="java.lang.Long">
+		UPDATE tbl_wp_qrcode q
+		SET q.qr_status = 1
+		WHERE
+			q.qr_id = #{qrid}
+	</update>
+	
+	<select id="findDidByQrid" parameterType="java.lang.Long" resultType="java.lang.Long">
+		SELECT
+			q.qr_did did
+		FROM
+			tbl_wp_qrcode q
+		WHERE
+			q.qr_id = #{qrid}
+		LIMIT 1
+	</select>
+	
+</mapper>

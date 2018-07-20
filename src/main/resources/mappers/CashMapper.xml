@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wayplay.wpactivity.dao.CashDao">
+
+	<insert id="insertCash" parameterType="com.wayplay.wpactivity.model.Cash"
+		useGeneratedKeys="true" keyProperty="caid">
+		INSERT INTO tbl_wp_cash (
+			ca_name,
+			ca_status,
+			ca_value,
+			ca_unit,
+			ca_issuetime
+		)
+		VALUES
+			(#{name}, #{status}, #{value}, #{unit}, now())
+	</insert>
+	
+	<update id="updateCashStatus" parameterType="java.util.HashMap">
+		UPDATE tbl_wp_cash c
+		SET c.ca_status = #{status}
+		WHERE
+			c.ca_id = #{caid}
+	</update>
+	
+</mapper>

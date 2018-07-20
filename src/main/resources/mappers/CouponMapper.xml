@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wayplay.wpactivity.dao.CouponDao">
+
+	<select id="findRandomCoupon" resultType="com.wayplay.wpactivity.model.Coupon">
+		SELECT
+			c.cp_id cpid,
+			c.cp_name "name",
+			c.cp_desc "desc",
+			c.cp_period period,
+			c.cp_status "status",
+			c.cp_createtime createtime,
+			c.cp_value "value",
+			c.cp_unit unit
+		FROM
+			tbl_wp_coupon c
+		WHERE
+			c.cp_status = 0
+		ORDER BY
+			cp_id
+		LIMIT 1
+	</select>
+	
+	<update id="updateCouponStatus" parameterType="java.util.HashMap">
+		UPDATE tbl_wp_coupon c
+		SET c.cp_status = #{status}
+		WHERE
+			c.cp_id = #{cpid}
+	</update>
+	
+</mapper>

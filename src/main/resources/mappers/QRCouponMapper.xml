@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wayplay.wpactivity.dao.QRCouponDao">
+
+	<insert id="insertQRCoupon" parameterType="com.wayplay.wpactivity.model.QRCoupon">
+		INSERT INTO tbl_wp_qrcoupon (wc_qrid, wc_type, wc_cid)
+		VALUES
+			(#{qrid}, #{type}, #{cid})
+	</insert>
+	
+	<select id="findCouponListByQRid" parameterType="java.lang.Long"
+		resultType="com.wayplay.wpactivity.model.QRCoupon">
+		SELECT
+			q.wc_qrid qrid,
+			q.wc_type type,
+			q.wc_cid cid
+		FROM
+			tbl_wp_qrcoupon q
+		WHERE
+			q.wc_qrid = #{qrid}
+	</select>
+	
+</mapper>

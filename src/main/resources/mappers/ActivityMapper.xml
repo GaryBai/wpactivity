@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wayplay.wpactivity.dao.ActivityDao">
+
+	<select id="findCurActivity" resultType="com.wayplay.wpactivity.model.Activity">
+		SELECT
+			a.ac_id acid,
+			a.ac_content content,
+			a.ac_homepicurl homepicurl,
+			a.ac_actpicurl actpicurl,
+			a.ac_prize_s prizes,
+			a.ac_prize_m prizem,
+			a.ac_prize_l prizel,
+			a.ac_createtime createtime
+		FROM
+			tbl_wp_activity a
+		WHERE
+			a.ac_status = 1
+		LIMIT 1
+	</select>
+	
+</mapper>

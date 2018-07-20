@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: dev
+mybatis:
+  typeAliasesPackage: com.wayplay.wpactivity.model
+  mapperLocations: classpath:mappers/*.xml
